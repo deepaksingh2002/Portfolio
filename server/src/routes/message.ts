@@ -1,5 +1,10 @@
 import { Router } from 'express';
-import { sendMessage, getMessages } from '../controllers/messageController';
+import {
+  sendMessage,
+  getMessages,
+  markMessageAsRead,
+  deleteMessage,
+} from '../controllers/messageController';
 import { body } from 'express-validator';
 import { validateRequest } from '../middleware/validateRequest';
 import rateLimit from 'express-rate-limit';
@@ -14,18 +19,20 @@ const contactLimiter = rateLimit({
 const router = Router();
 
 router.post(
-  '/contact',
+  '/',
   contactLimiter,
   [
-    body('name').notEmpty(),
-    body('email').isEmail(),
-    body('subject').notEmpty(),
-    body('message').notEmpty(),
+    body('name').trim().notEmpty(),
+    body('email').trim().isEmail(),
+    body('subject').trim().notEmpty(),
+    body('message').trim().notEmpty(),
   ],
   validateRequest,
   sendMessage
 );
 
 router.get('/messages', verifyToken, getMessages);
+router.patch('/messages/:id/read', verifyToken, markMessageAsRead);
+router.delete('/messages/:id', verifyToken, deleteMessage);
 
 export default router;

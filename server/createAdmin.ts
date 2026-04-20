@@ -2,16 +2,19 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 import Admin from './src/models/Admin.js';
+import { connectDB } from './src/config/db.js';
 
 dotenv.config();
 
-const email = process.env.USER_EMAIL || 'admin@example.com';
+const email = (process.env.USER_EMAIL || 'admin@example.com').trim().toLowerCase();
 const password = process.env.USER_PASSWORD || 'adminpassword';
 
 async function createAdmin() {
-  await mongoose.connect(process.env.MONGODB_URI!);
+  await connectDB();
   const existing = await Admin.findOne({ email });
   if (existing) {
+    existing.refreshTokenHash = null;
+    await existing.save();
     console.log('Admin already exists:', email);
     process.exit(0);
   }

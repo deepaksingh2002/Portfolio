@@ -8,6 +8,7 @@ import {
 } from '../controllers/projectController';
 import { verifyToken } from '../middleware/auth';
 import { upload } from '../middleware/upload';
+import { normalizeProjectPayload } from '../middleware/normalizeProjectPayload';
 import { body } from 'express-validator';
 import { validateRequest } from '../middleware/validateRequest';
 
@@ -20,6 +21,7 @@ router.post(
   '/',
   verifyToken,
   upload.single('image'),
+  normalizeProjectPayload,
   [
     body('title').notEmpty(),
     body('description').notEmpty(),
@@ -36,6 +38,7 @@ router.put(
   '/:id',
   verifyToken,
   upload.single('image'),
+  normalizeProjectPayload,
   [
     body('title').optional().notEmpty(),
     body('description').optional().notEmpty(),

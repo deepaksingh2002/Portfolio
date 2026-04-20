@@ -10,10 +10,12 @@ import { AppRouter } from './routes/AppRouter';
 import App from './App';
 import { ToastProvider } from './context/ToastContext';
 import { PortfolioProvider } from './store/api/portfolioContext';
+import AuthBootstrap from './Components/admin/AuthBootstrap';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
+      <AuthBootstrap />
       <PortfolioProvider>
         <ToastProvider>
           <HelmetProvider>

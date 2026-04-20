@@ -1,10 +1,20 @@
-import { Navigate, Outlet } from 'react-router-dom'
-import { useAppSelector } from '../store/hooks'
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAppSelector } from '../store/hooks';
 
 export default function ProtectedRoute() {
-  const token = useAppSelector(state => state.auth?.token)
+  const { token, initialized, status } = useAppSelector((state) => state.auth);
 
-  if (!token) return <Navigate to="/admin/login" replace />
+  if (!initialized || status === 'loading') {
+    return (
+      <div className="page page-active" style={{ padding: '24px', textAlign: 'center' }}>
+        Checking session...
+      </div>
+    );
+  }
 
-  return <Outlet />
+  if (!token) {
+    return <Navigate to="/admin/login" replace />;
+  }
+
+  return <Outlet />;
 }

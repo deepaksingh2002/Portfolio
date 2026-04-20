@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import axios from 'axios';
+import { api } from '../../lib/api';
 
 export interface Project {
   _id: string;
@@ -41,9 +41,9 @@ export const PortfolioProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     try {
       const [projectsRes, skillsRes, experienceRes] = await Promise.all([
-        axios.get('/api/projects', { withCredentials: true }),
-        axios.get('/api/skills', { withCredentials: true }),
-        axios.get('/api/experience', { withCredentials: true }),
+        api.get('/projects'),
+        api.get('/skills'),
+        api.get('/experience'),
       ]);
       setProjects(Array.isArray(projectsRes.data) ? projectsRes.data : []);
       setSkills(Array.isArray(skillsRes.data) ? skillsRes.data : []);
