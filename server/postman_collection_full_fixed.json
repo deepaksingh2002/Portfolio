@@ -1,0 +1,44 @@
+{
+  "info": {
+    "name": "Portfolio API Collection",
+    "description": "Full collection for Portfolio API with all endpoints and token support.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Projects",
+      "item": [
+        { "name": "Get Projects", "request": { "method": "GET", "url": "{{base_url}}/api/projects" } },
+        { "name": "Get Project By ID", "request": { "method": "GET", "url": "{{base_url}}/api/projects/:id" } },
+        { "name": "Create Project", "request": { "method": "POST", "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ], "url": "{{base_url}}/api/projects", "body": { "mode": "formdata", "formdata": [ { "key": "title", "value": "Test Project", "type": "text" }, { "key": "description", "value": "A test project.", "type": "text" }, { "key": "techStack", "value": "[\"Node.js\",\"Express\"]", "type": "text" }, { "key": "liveUrl", "value": "http://example.com", "type": "text" }, { "key": "githubUrl", "value": "http://github.com/example", "type": "text" }, { "key": "category", "value": "web", "type": "text" }, { "key": "image", "type": "file" } ] } } },
+        { "name": "Update Project", "request": { "method": "PUT", "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ], "url": "{{base_url}}/api/projects/:id", "body": { "mode": "formdata", "formdata": [ { "key": "title", "value": "Updated Project", "type": "text" } ] } } },
+        { "name": "Delete Project", "request": { "method": "DELETE", "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ], "url": "{{base_url}}/api/projects/:id" } }
+      ]
+    },
+    {
+      "name": "Skills",
+      "item": [
+        { "name": "Get Skills", "request": { "method": "GET", "url": "{{base_url}}/api/skills" } }
+      ]
+    },
+    {
+      "name": "Experience",
+      "item": [
+        { "name": "Get Experience", "request": { "method": "GET", "url": "{{base_url}}/api/experience" } }
+      ]
+    },
+    {
+      "name": "Contact",
+      "item": [
+        { "name": "Send Message", "request": { "method": "POST", "url": "{{base_url}}/api/contact", "header": [ { "key": "Content-Type", "value": "application/json" } ], "body": { "mode": "raw", "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"subject\": \"Hello\",\n  \"message\": \"This is a test message.\"\n}" } } },
+        { "name": "Get Messages", "request": { "method": "GET", "url": "{{base_url}}/api/contact/messages", "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ] } }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        { "name": "Admin Login", "request": { "method": "POST", "url": "{{base_url}}/api/auth/login", "header": [ { "key": "Content-Type", "value": "application/json" } ], "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"your_password\"\n}" } } }
+      ]
+    }
+  ]
+}

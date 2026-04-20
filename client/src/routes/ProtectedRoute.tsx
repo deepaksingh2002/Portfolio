@@ -1,0 +1,10 @@
+import { Navigate, Outlet } from 'react-router-dom'
+import { useAppSelector } from '../store/hooks'
+
+export default function ProtectedRoute() {
+  const token = useAppSelector(state => state.auth?.token)
+
+  if (!token) return <Navigate to="/admin/login" replace />
+
+  return <Outlet />
+}

@@ -1,10 +1,30 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import React, { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import './app.css';
+
+import { AppRouter } from './routes/AppRouter';
+import App from './App';
+import { ToastProvider } from './context/ToastContext';
+import { PortfolioProvider } from './store/api/portfolioContext';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
-  </StrictMode>,
-)
+    <Provider store={store}>
+      <PortfolioProvider>
+        <ToastProvider>
+          <HelmetProvider>
+            <BrowserRouter>
+              <App>
+                <AppRouter />
+              </App>
+            </BrowserRouter>
+          </HelmetProvider>
+        </ToastProvider>
+      </PortfolioProvider>
+    </Provider>
+  </StrictMode>
+);
