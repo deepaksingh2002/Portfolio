@@ -53,7 +53,10 @@ export const sendMessage = async (req: Request, res: Response, next: NextFunctio
 
 export const getMessages = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const messages = await Message.find().sort({ createdAt: -1 });
+    const messages = await Message.aggregate([
+      { $sort: { createdAt: -1 } },
+      { $project: { name: 1, email: 1, subject: 1, message: 1, read: 1, createdAt: 1 } }
+    ]);
     res.json(messages);
   } catch (err) {
     next(err);

@@ -2,20 +2,17 @@ import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { Provider } from 'react-redux';
-import { store } from './store';
+import { AuthProvider } from './context/AuthContext';
 import './app.css';
 
 import { AppRouter } from './routes/AppRouter';
 import App from './App';
 import { ToastProvider } from './context/ToastContext';
 import { PortfolioProvider } from './store/api/portfolioContext';
-import AuthBootstrap from './Components/admin/AuthBootstrap';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Provider store={store}>
-      <AuthBootstrap />
+    <AuthProvider>
       <PortfolioProvider>
         <ToastProvider>
           <HelmetProvider>
@@ -27,6 +24,6 @@ createRoot(document.getElementById('root')).render(
           </HelmetProvider>
         </ToastProvider>
       </PortfolioProvider>
-    </Provider>
+    </AuthProvider>
   </StrictMode>
 );

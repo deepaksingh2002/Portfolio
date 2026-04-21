@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { logoutAdmin } from '../../store/slices/authSlice';
+import { useAuth } from '../../context/AuthContext';
 
 interface SidebarProps {
   activeTab: string;
@@ -10,11 +9,11 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeTab, switchTab }) => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const adminEmail = useAppSelector((state) => state.auth.user?.email);
+  const { user, logout } = useAuth();
+  const adminEmail = user?.email;
 
   const handleLogout = async () => {
-    await dispatch(logoutAdmin());
+    await logout();
     navigate('/admin/login', { replace: true });
   };
 

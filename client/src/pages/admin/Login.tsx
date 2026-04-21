@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { loginAdmin } from '../../store/slices/authSlice';
+import { useAuth } from '../../context/AuthContext';
 
 const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { token, status, error } = useAppSelector((state) => state.auth);
+  const { token, status, error, login } = useAuth();
   const [email, setEmail] = useState('admin@example.com');
   const [password, setPassword] = useState('');
 
@@ -18,9 +16,8 @@ const AdminLogin: React.FC = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const result = await dispatch(loginAdmin({ email, password }));
-    if (loginAdmin.fulfilled.match(result)) {
+    const success = await login(email, password);
+    if (success) {
       navigate('/admin/dashboard', { replace: true });
     }
   };

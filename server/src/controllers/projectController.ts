@@ -24,7 +24,11 @@ export const getProjects = async (req: Request, res: Response, next: NextFunctio
   try {
     const filter: any = {};
     if (req.query.featured === 'true') filter.featured = true;
-    const projects = await Project.find(filter).sort({ order: 1 });
+    const projects = await Project.aggregate([
+      { $match: filter },
+      { $sort: { order: 1 } },
+      { $project: { title: 1, description: 1, image: 1, techStack: 1, featured: 1, status: 1, createdAt: 1 } }
+    ]);
     res.json(projects);
   } catch (err) {
     next(err);

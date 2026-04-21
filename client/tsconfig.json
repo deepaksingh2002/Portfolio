@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "target": "ESNext",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
@@ -9,15 +10,15 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": "./src",
-    "paths": {
-      "@/*": ["*"]
-    }
+    "jsx": "react-jsx"
+    // "baseUrl": "./src", // Deprecated in TS 7.0, consider using import maps or jsconfig for path mapping
+    // "paths": {
+    //   "@/*": ["*"]
+    // }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

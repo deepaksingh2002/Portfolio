@@ -4,7 +4,10 @@ import Experience from '../models/Experience';
 
 export const getExperience = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const experience = await Experience.find().sort({ current: -1, _id: -1 });
+    const experience = await Experience.aggregate([
+      { $sort: { current: -1, _id: -1 } },
+      { $project: { role: 1, company: 1, startDate: 1, endDate: 1, description: 1, current: 1 } }
+    ]);
     res.json(experience);
   } catch (err) {
     next(err);

@@ -10,24 +10,45 @@ export const getDashboardOverview = async (
   next: NextFunction
 ) => {
   try {
-    const [projectsCount, skillsCount, experienceCount, messagesCount, unreadMessages, recentProjects, recentMessages] =
-      await Promise.all([
-        Project.countDocuments(),
-        Skill.countDocuments(),
-        Experience.countDocuments(),
-        Message.countDocuments(),
-        Message.countDocuments({ read: false }),
-        Project.find().sort({ createdAt: -1 }).limit(5),
-        Message.find().sort({ createdAt: -1 }).limit(5),
-      ]);
+    // Aggregation for stats
+    const statsAgg = await Promise.all([
+      Project.aggregate([
+        { $count: 'count' }
+      ]),
+      Skill.aggregate([
+        { $count: 'count' }
+      ]),
+      Experience.aggregate([
+        { $count: 'count' }
+      ]),
+      Message.aggregate([
+        { $count: 'count' }
+      ]),
+      Message.aggregate([
+        { $match: { read: false } },
+        { $count: 'count' }
+      ]),
+      Project.aggregate([
+        { $sort: { createdAt: -1 } },
+        { $limit: 5 },
+        { $project: { title: 1, createdAt: 1, techStack: 1, featured: 1, status: 1 } }
+      ]),
+      Message.aggregate([
+        { $sort: { createdAt: -1 } },
+        { $limit: 5 },
+        { $project: { name: 1, subject: 1, createdAt: 1, read: 1 } }
+      ])
+    ]);
+
+    const [projectsCount, skillsCount, experienceCount, messagesCount, unreadMessages, recentProjects, recentMessages] = statsAgg;
 
     res.json({
       stats: {
-        projectsCount,
-        skillsCount,
-        experienceCount,
-        messagesCount,
-        unreadMessages,
+        projectsCount: projectsCount[0]?.count || 0,
+        skillsCount: skillsCount[0]?.count || 0,
+        experienceCount: experienceCount[0]?.count || 0,
+        messagesCount: messagesCount[0]?.count || 0,
+        unreadMessages: unreadMessages[0]?.count || 0,
       },
       recentProjects,
       recentMessages,

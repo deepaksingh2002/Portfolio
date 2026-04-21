@@ -1,16 +1,15 @@
+
 import { useEffect } from 'react';
-import { refreshSession } from '../../store/slices/authSlice';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useAuth } from '../../context/AuthContext';
 
 export default function AuthBootstrap() {
-  const dispatch = useAppDispatch();
-  const initialized = useAppSelector((state) => state.auth.initialized);
+  const { status, refreshSession } = useAuth();
 
   useEffect(() => {
-    if (!initialized) {
-      dispatch(refreshSession());
+    if (status === 'idle') {
+      refreshSession();
     }
-  }, [dispatch, initialized]);
+  }, [status, refreshSession]);
 
   return null;
 }

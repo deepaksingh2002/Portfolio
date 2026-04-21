@@ -1,6 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { api } from '../../../lib/api';
-import { useAppSelector } from '../../../store/hooks';
+import React, { useEffect, useState } from 'react';
+import { usePortfolio } from '../../../store/api/portfolioContext';
 
 const formatTimestamp = (value) => {
   if (!value) return 'Unknown';
@@ -12,78 +11,18 @@ const formatTimestamp = (value) => {
 };
 
 export const MessagesView = () => {
-  const token = useAppSelector((state) => state.auth.token);
-  const [messages, setMessages] = useState([]);
+  const { messages, loading, error, refreshMessages, markMessageRead, deleteMessage } = usePortfolio();
   const [activeFilter, setActiveFilter] = useState('all');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
-  const headers = useMemo(
-    () => (token ? { Authorization: `Bearer ${token}` } : undefined),
-    [token]
-  );
+  const handleMarkRead = (id) => markMessageRead(id);
+  const handleDelete = (id) => deleteMessage(id);
 
-  const loadMessages = async () => {
-    if (!headers) {
-      setMessages([]);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-
-    try {
-      const response = await api.get('/contact/messages', { headers });
-      setMessages(Array.isArray(response.data) ? response.data : []);
-    } catch (fetchError) {
-      setError(
-        fetchError?.response?.data?.message || 'Unable to load messages right now.'
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadMessages();
-  }, [token]);
-
-  const handleMarkRead = async (id) => {
-    if (!headers) return;
-
-    try {
-      const response = await api.patch(`/contact/messages/${id}/read`, {}, { headers });
-      setMessages((current) =>
-        current.map((message) => (message._id === id ? response.data : message))
-      );
-    } catch (requestError) {
-      setError(
-        requestError?.response?.data?.message || 'Unable to mark this message as read.'
-      );
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (!headers) return;
-
-    try {
-      await api.delete(`/contact/messages/${id}`, { headers });
-      setMessages((current) => current.filter((message) => message._id !== id));
-    } catch (requestError) {
-      setError(
-        requestError?.response?.data?.message || 'Unable to delete this message.'
-      );
-    }
-  };
-
-  const filteredMessages = messages.filter((message) => {
+  const filteredMessages = messages?.filter((message) => {
     if (activeFilter === 'unread') return !message.read;
     if (activeFilter === 'read') return Boolean(message.read);
     return true;
-  });
-
-  const unreadCount = messages.filter((message) => !message.read).length;
+  }) || [];
+  const unreadCount = messages?.filter((message) => !message.read).length || 0;
 
   return (
     <div className="subview active" id="sv-messages">
@@ -91,7 +30,7 @@ export const MessagesView = () => {
         <div className="sec-title">
           Inbox <span>({messages.length})</span>
         </div>
-        <button className="sec-action" onClick={loadMessages}>
+        <button className="sec-action" onClick={refreshMessages}>
           Refresh
         </button>
       </div>
