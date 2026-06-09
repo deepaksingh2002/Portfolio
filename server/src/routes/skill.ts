@@ -19,7 +19,7 @@ router.post(
     body('name').trim().notEmpty(),
     body('category').isIn(['frontend', 'backend', 'devops', 'tools']),
     body('proficiency').isInt({ min: 1, max: 5 }),
-    body('icon').trim().notEmpty(),
+    body('icon').optional({ checkFalsy: true }).trim(),
   ],
   validateRequest,
   createSkill

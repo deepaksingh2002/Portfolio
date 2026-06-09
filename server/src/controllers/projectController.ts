@@ -8,11 +8,19 @@ const uploadProjectImage = async (file?: Express.Multer.File) => {
     return '';
   }
 
-  return new Promise<string>((resolve, reject) => {
+  return new Promise<string>((resolve, _reject) => {
+    if (!process.env.CLOUDINARY_API_KEY || process.env.CLOUDINARY_API_KEY.includes('your_api_key')) {
+      console.warn('Cloudinary API key is unset or placeholder. Skipping image upload.');
+      return resolve('');
+    }
+
     const stream = cloudinary.uploader.upload_stream(
       { folder: 'portfolio/projects' },
       (error, result) => {
-        if (error || !result) return reject(error);
+        if (error || !result) {
+          console.error('Cloudinary upload error:', error);
+          return resolve(''); // Fallback gracefully
+        }
         resolve(result.secure_url);
       }
     );
@@ -26,8 +34,22 @@ export const getProjects = async (req: Request, res: Response, next: NextFunctio
     if (req.query.featured === 'true') filter.featured = true;
     const projects = await Project.aggregate([
       { $match: filter },
-      { $sort: { order: 1 } },
-      { $project: { title: 1, description: 1, image: 1, techStack: 1, featured: 1, status: 1, createdAt: 1 } }
+      { $sort: { order: 1, createdAt: -1 } },
+      {
+        $project: {
+          title: 1,
+          description: 1,
+          image: 1,
+          techStack: 1,
+          featured: 1,
+          published: 1,
+          liveUrl: 1,
+          githubUrl: 1,
+          category: 1,
+          order: 1,
+          createdAt: 1,
+        },
+      },
     ]);
     res.json(projects);
   } catch (err) {

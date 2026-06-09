@@ -6,7 +6,7 @@ export const getSkills = async (req: Request, res: Response, next: NextFunction)
   try {
     const skills = await Skill.aggregate([
       { $sort: { category: 1, proficiency: -1, name: 1 } },
-      { $project: { name: 1, category: 1, proficiency: 1 } }
+      { $project: { name: 1, category: 1, proficiency: 1, icon: 1 } }
     ]);
     res.json(skills);
   } catch (err) {

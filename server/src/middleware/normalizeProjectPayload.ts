@@ -73,6 +73,7 @@ export const normalizeProjectPayload = (
       ? [...new Set(techStack.map((item) => String(item).trim()).filter(Boolean))]
       : techStack,
     featured: parseBooleanField(req.body.featured),
+    published: parseBooleanField(req.body.published),
     order: parseNumberField(req.body.order),
   };
 

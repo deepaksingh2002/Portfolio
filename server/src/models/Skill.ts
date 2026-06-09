@@ -4,7 +4,7 @@ export interface ISkill extends Document {
   name: string;
   category: 'frontend' | 'backend' | 'devops' | 'tools';
   proficiency: number;
-  icon: string;
+  icon?: string;
 }
 
 const SkillSchema = new Schema<ISkill>({
@@ -15,7 +15,7 @@ const SkillSchema = new Schema<ISkill>({
     required: true,
   },
   proficiency: { type: Number, min: 1, max: 5, required: true },
-  icon: { type: String, required: true },
+  icon: { type: String, trim: true },
 });
 
 export default mongoose.model<ISkill>('Skill', SkillSchema);

@@ -13,7 +13,7 @@ import { validateRequest } from '../middleware/validateRequest';
 
 const router = Router();
 
-router.get('/', verifyToken, getSettings);
+router.get('/', getSettings);
 router.put(
   '/profile',
   verifyToken,

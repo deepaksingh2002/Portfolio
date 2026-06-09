@@ -4,12 +4,15 @@ export interface IProject extends Document {
   title: string;
   description: string;
   techStack: string[];
-  liveUrl: string;
-  githubUrl: string;
-  image: string;
+  liveUrl?: string;
+  githubUrl?: string;
+  image?: string;
   featured: boolean;
+  published: boolean;
   order: number;
   category: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const ProjectSchema = new Schema<IProject>(
@@ -17,10 +20,11 @@ const ProjectSchema = new Schema<IProject>(
     title: { type: String, required: true, trim: true },
     description: { type: String, required: true },
     techStack: { type: [String], required: true },
-    liveUrl: { type: String, required: true },
-    githubUrl: { type: String, required: true },
-    image: { type: String, required: true },
+    liveUrl: { type: String, default: '' },
+    githubUrl: { type: String, default: '' },
+    image: { type: String, default: '' },
     featured: { type: Boolean, default: false },
+    published: { type: Boolean, default: false },
     order: { type: Number, default: 0 },
     category: { type: String, required: true },
   },
