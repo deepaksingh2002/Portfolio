@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
-import asyncHandler from "../utils/asyncHandler.js";
 
 const connectDB = async () => {
     try {
-        const connectInstance = await mongoose.connect(`${process.env.MONGO_URI}/${Portfolio}`)
+        const connectInstance = await mongoose.connect(`${process.env.MONGO_URI}/${"Portfolio"}`)
         console.log(`MongoDB Connected!! DB Host: ${connectInstance.connection.host}`);
     }
     catch (error) {
@@ -11,3 +10,5 @@ const connectDB = async () => {
         process.exit(1);
     }
 }
+
+export { connectDB }
