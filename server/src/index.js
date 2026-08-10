@@ -1,18 +1,21 @@
-import {configDotenv} from 'dotenv';
-import { app } from './app.js';
-import { connectDB } from './config/db.js';
+import "dotenv/config"
+import connectDB from "./config/db.js"
+import { app }   from "./app.js"
 
-configDotenv({
-    path: './.env',
-});
+const PORT = process.env.PORT || 5000
 
 connectDB()
-.then(() => {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
-})
-.catch((error) => {
-  console.error('Failed to connect to the database:', error);
-});
+    .then(() => {
+        const server = app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT} — ${process.env.NODE_ENV || "development"} mode`)
+        })
+
+        process.on("unhandled Rejection", (err) => {
+            console.error("Unhandled Rejection:", err.message)
+            server.close(() => process.exit(1))
+        })
+    })
+    .catch((err) => {
+        console.error("DB connection failed:", err.message)
+        process.exit(1)
+    })
