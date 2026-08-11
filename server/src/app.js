@@ -9,7 +9,7 @@ const app = express()
 // helmet for security headers, cors for cross-origin requests
 app.use(helmet())
 app.use(cors({
-    origin:      process.env.CORS_ORIGIN || "http://localhost:5173",
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
     credentials: true,
 }))
 
@@ -25,7 +25,7 @@ if (process.env.NODE_ENV === "development") app.use(morgan("dev"))
 
 // Health check endpoint
 app.get("/api/health", (_req, res) => {
-    res.json({ success: true, message: "Portfolio API running 🚀", version: "1.0.0" })
+    res.json({ success: true, message: "Portfolio API running", version: "1.0.0" })
 })
 
 // routes 
