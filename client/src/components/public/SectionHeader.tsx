@@ -1,6 +1,10 @@
 import { motion } from 'framer-motion';
 
-interface Props { number: string; title: string; dimText: string; }
+interface Props {
+  number: string;
+  title: string;
+  dimText: string;
+}
 
 export default function SectionHeader({ number, title, dimText }: Props) {
   return (
@@ -11,11 +15,19 @@ export default function SectionHeader({ number, title, dimText }: Props) {
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
     >
-      <span className="font-mono text-[13px] text-accent mb-1 flex-shrink-0">{number}</span>
-      <h2 className="font-display font-extrabold leading-[0.95] tracking-[-0.02em] flex-shrink-0"
-        style={{ fontSize: 'clamp(40px, 5vw, 72px)' }}>
-        {title}<br />
-        <span className="text-transparent" style={{ WebkitTextStroke: '1px rgba(232,234,240,0.15)' }}>
+      <span className="font-mono text-[13px] text-accent mb-1 flex-shrink-0">
+        {number}
+      </span>
+      <h2
+        className="font-display font-extrabold leading-[0.95] tracking-[-0.02em] flex-shrink-0"
+        style={{ fontSize: 'clamp(40px, 5vw, 72px)' }}
+      >
+        {title}
+        <br />
+        <span
+          className="text-transparent"
+          style={{ WebkitTextStroke: '1px rgba(232,234,240,0.15)' }}
+        >
           {dimText}
         </span>
       </h2>
